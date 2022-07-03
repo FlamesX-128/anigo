@@ -4,7 +4,7 @@ type Anigo struct {
 	Anime, Episode, Image, Url string
 }
 
-func (anigo *Anigo) UseService(svc string, mod string, args ...string) ([]any, bool) {
+func (anigo *Anigo) UseService(svc string, mod string, args ...string) ([]interface{}, bool) {
 	for _, s := range Services {
 		if s.Solver != svc {
 
