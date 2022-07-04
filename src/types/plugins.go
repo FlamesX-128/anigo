@@ -1,27 +1,34 @@
 package types
 
-type Process struct {
-	Handler    func(*Anigo)
-	Persistent bool
+type PersistentProcess int32
+type FloatingProcess float32
+
+type ProcessPlugin[_ ~float32 | ~int32] struct {
+	Handler func(*Anigo)
+	Test    []Status
+
+	Name string
 }
 
-type Provider struct {
-	Handler func(string) (string, bool)
+type ProviderPlugin struct {
+	Handler func(string, string) (string, bool)
+	Test    func() []Status
+
 	Solvers []string
+	Name    string
 }
 
-type Service struct {
-	Handler map[string]func(...string) []any
-	Solver  string
-}
+type ServicePlugin struct {
+	Handler func(string, ...string) (interface{}, bool)
+	Test    func() []Status
 
-//
+	Solvers []string
+	Name    string
+}
 
 type PluginType interface {
-	Process | Provider | Service
-}
-
-type Plugin[T PluginType] struct {
-	Author, Name, Url, Version string
-	This                       T
+	ProcessPlugin[PersistentProcess] |
+		ProcessPlugin[FloatingProcess] |
+		ProviderPlugin |
+		ServicePlugin
 }

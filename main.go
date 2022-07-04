@@ -1,43 +1,31 @@
 package main
 
 import (
-	"os"
-	"path"
 	"sync"
 
-	"github.com/FlamesX-128/anigo/src/controllers/plugins"
 	"github.com/FlamesX-128/anigo/src/types"
-	"github.com/FlamesX-128/anigo/src/utils"
 )
 
-var Scope = &types.Anigo{}
+var wg sync.WaitGroup
 
 func main() {
-	var processes []func(anigo *types.Anigo)
-	var wg sync.WaitGroup
+	aprops := types.Anigo_.Properties
 
-	dir := utils.Try(os.Getwd())
+	processes := aprops["persistent-processes"].([]types.ProcessPlugin[int32])
+	fprocesses := aprops["floating-processes"].([]types.ProcessPlugin[float32])
 
-	plugins.Load(path.Join(dir, "plugins"))
+	for _, process := range fprocesses {
+		go process.Handler(&types.Anigo_)
 
-	for _, p := range types.Processes {
-		if p.Persistent {
-			processes = append(processes, p.Handler)
-
-			continue
-		}
-
-		go p.Handler(Scope)
 	}
 
-	for _, p := range processes {
+	for _, process := range processes {
+		go func() {
+			process.Handler(&types.Anigo_)
+			wg.Done()
+		}()
+
 		wg.Add(1)
-
-		go (func() {
-			p(Scope)
-			defer wg.Done()
-		})()
-
 	}
 
 	wg.Wait()

@@ -7,12 +7,12 @@ import (
 	"github.com/FlamesX-128/anigo/src/utils"
 )
 
-func Search(path string) (p []string) {
+func search(path string) (p []string) {
 	for _, file := range utils.ReadDir(path) {
 		filename := file.Name()
 
 		if file.Mode().IsDir() {
-			Search(fs.Join(path, filename))
+			search(fs.Join(path, filename))
 
 			continue
 		}
