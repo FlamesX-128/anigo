@@ -16,7 +16,7 @@ type SliceContent interface {
 		bool | string
 }
 
-var Anigo_ = Anigo{
+var Anigo_ = &Anigo{
 	Properties: map[string]interface{}{
 		"persistent-processes": []ProcessPlugin[int32]{},
 		"floating-processes":   []ProcessPlugin[float32]{},

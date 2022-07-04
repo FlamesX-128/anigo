@@ -23,13 +23,13 @@ func main() {
 	)
 
 	for _, process := range fprocesses.([]types.ProcessPlugin[float32]) {
-		go process.Handler(&types.Anigo_)
+		go process.Handler(types.Anigo_)
 
 	}
 
 	for _, process := range pprocesses.([]types.ProcessPlugin[int32]) {
 		go func() {
-			process.Handler(&types.Anigo_)
+			process.Handler(types.Anigo_)
 			wg.Done()
 		}()
 
