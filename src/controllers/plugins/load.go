@@ -6,14 +6,14 @@ import (
 	"github.com/FlamesX-128/anigo/src/utils"
 )
 
-func Load(path string) {
+func Load(path string) bool {
 	if ok, err := utils.Exists(path); !ok {
 		if err == nil {
-			log.Panicln("The directory " + path + " does not exist.")
+			log.Printf("The following directory doesn't exist: %s\n", path)
 
 		}
 
-		return
+		return false
 	}
 
 	for _, p := range search(path) {
@@ -24,4 +24,5 @@ func Load(path string) {
 
 	}
 
+	return true
 }

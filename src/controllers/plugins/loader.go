@@ -1,16 +1,22 @@
 package plugins
 
 import (
+	"log"
 	"plugin"
 
 	"github.com/FlamesX-128/anigo/src/types"
-	"github.com/FlamesX-128/anigo/src/utils"
 )
 
 func loader(path string) bool {
-	plugin := utils.Try(plugin.Open(path))
+	plugin, err := plugin.Open(path)
 
-	plug := utils.Try(plugin.Lookup("Plugin"))
+	if err != nil {
+		log.Println(err.Error())
+
+		return false
+	}
+
+	plug, _ := plugin.Lookup("Plugin")
 
 	switch data := plug.(type) {
 	case types.ProcessPlugin[int32]:

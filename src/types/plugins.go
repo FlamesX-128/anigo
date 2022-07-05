@@ -1,11 +1,8 @@
 package types
 
-type PersistentProcess int32
-type FloatingProcess float32
-
-type ProcessPlugin[_ ~float32 | ~int32] struct {
+type ProcessPlugin[_ float32 | int32] struct {
 	Handler func(*Anigo)
-	Test    []Status
+	Test    func() []Status
 
 	Name string
 }
@@ -27,8 +24,8 @@ type ServicePlugin struct {
 }
 
 type PluginType interface {
-	ProcessPlugin[PersistentProcess] |
-		ProcessPlugin[FloatingProcess] |
+	ProcessPlugin[int32] |
+		ProcessPlugin[float32] |
 		ProviderPlugin |
 		ServicePlugin
 }
